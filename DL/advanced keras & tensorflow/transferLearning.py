@@ -85,3 +85,8 @@ model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy']
 
 # Train the model again 
 model.fit(train_generator, epochs=10) 
+
+
+#adding validation data and plotting it 
+# Modify data generator to include validation data
+a
