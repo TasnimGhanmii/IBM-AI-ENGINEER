@@ -12,8 +12,9 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator, load_img, i
 #this is a collection of 32*32 images in 10 classes with 6k img per class
 (x_train, y_train), (x_test, y_test) = tf.keras.datasets.cifar10.load_data()
 
-# Normalize the pixel values for augmentation
-#improves performance
+# Normalize the pixel values for augmentation ([0,1])
+#preproessing step that improves performance
+                  #convert to 32 floating number
 x_train = x_train.astype('float32') / 255.0
 x_test = x_test.astype('float32') / 255.0
 
@@ -44,6 +45,7 @@ image.save('sample.jpg')
 img_path = 'sample.jpg' 
 img = load_img(img_path) 
 x = img_to_array(img) 
+#adding a new dimension to the beginning of the array to match the 4D shape (batch_size, height, width, channels) 
 x = np.expand_dims(x, axis=0)
 
 # Create an instance of ImageDataGenerator with basic augmentations
@@ -57,10 +59,34 @@ datagen = ImageDataGenerator(
     fill_mode='nearest'
 )
 
+#creating custom data augmentation fct
+# Define a custom data augmentation function
+def add_random_noise(image):
+    noise = np.random.normal(0, 0.1, image.shape)
+    return image + noise
+
+# Create an instance of ImageDataGenerator with the custom augmentation
+datagen = ImageDataGenerator(preprocessing_function=add_random_noise)
+
+
+# Create an instance of ImageDataGenerator with normalization options: Feature-wise and sample-wise normalization
+datagen = ImageDataGenerator(
+    featurewise_center=True,
+    featurewise_std_normalization=True,
+    samplewise_center=True,
+    samplewise_std_normalization=True
+)
+
+# Load the sample image again and fit the generator (normally done on the training set)
+datagen.fit(x)
+
+
 # Generate batches of augmented images
 i = 0
+                          #x is the input data (imgs) to be augmented and batch size=1 means 1 img is gonna be generated at a tima
 for batch in datagen.flow(x, batch_size=1):
     plt.figure(i)
+                                #necessary to dispaly img via matplotlib
     imgplot = plt.imshow(batch[0].astype('uint8'))
     i += 1
     if i % 4 == 0:
