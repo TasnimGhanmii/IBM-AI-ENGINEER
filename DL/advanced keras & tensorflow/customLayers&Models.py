@@ -7,7 +7,7 @@ import numpy as np
 
 #defining a custom layer that ineherits from Layer 
 class CustomDenseLayer(Layer):
-    #defines number of units/neurons in a lyer if not provided the deault is 32
+    #defines number of units/neurons in a layer if not provided the deault is 32
     def __init__(self, units=128):
         #to ensure any inits performed by the base class Layer is executed
         super(CustomDenseLayer, self).__init__()

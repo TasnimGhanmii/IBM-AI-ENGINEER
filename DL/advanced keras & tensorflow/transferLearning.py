@@ -86,7 +86,38 @@ model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy']
 # Train the model again 
 model.fit(train_generator, epochs=10) 
 
+test_datagen = ImageDataGenerator(rescale=1./255)
+test_generator = test_datagen.flow_from_directory(
+    'sample_data',
+    target_size=(224, 224),
+    batch_size=32,
+    class_mode='binary'
+)
+
+# Evaluate the fine-tuned model on the test set
+test_loss, test_accuracy = model.evaluate(test_generator)
+print(f'Test Accuracy: {test_accuracy * 100:.2f}%')
+print(f'Test Loss: {test_loss:.4f}')
 
 #adding validation data and plotting it 
 # Modify data generator to include validation data
-a
+#train_datagen=ImageDataGenerator(rescale=1./255,validation=0.2)
+
+#train_generator=train_datagen.flow_from_directory(
+#   'sample_data',
+#    target_size=(244,244),
+#    batch_size=32,
+#   class_mode='binary',
+#    subset='training'
+#)
+
+#validation_generator=train_datagen.flow_from_directory(
+#    'sample_data',
+#    target_size=(244,244),
+#    batch_size=32,
+#    class_mode='binary',
+#    subset='validation'
+#)
+
+#train
+#history=model.fit(train_generator,epoch=10,validation_data=validation_generator)
