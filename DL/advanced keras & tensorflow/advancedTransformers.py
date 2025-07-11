@@ -59,16 +59,23 @@ X = X.reshape(X.shape[0], X.shape[1], 1)
 
 # Implementing Multi-Head Self-Attention
 class MultiHeadSelfAttention(Layer):
+    #init  the dense layers for query, key and value projections
     def __init__(self, embed_dim, num_heads=8):
         super(MultiHeadSelfAttention, self).__init__()
+        #size of the vector representing each token
         self.embed_dim = embed_dim
+        #Number of parallel attention heads
         self.num_heads = num_heads
+        #size of each head's projection
         self.projection_dim = embed_dim // num_heads
+        #key value & query layers
         self.query_dense = Dense(embed_dim)
         self.key_dense = Dense(embed_dim)
         self.value_dense = Dense(embed_dim)
+        #combines outputs from multiple heads back to original embedding size
         self.combine_heads = Dense(embed_dim)
 
+    #attention mechanism: computes the vectors
     def attention(self, query, key, value):
         score = tf.matmul(query, key, transpose_b=True)
         dim_key = tf.cast(tf.shape(key)[-1], tf.float32)
@@ -76,7 +83,7 @@ class MultiHeadSelfAttention(Layer):
         weights = tf.nn.softmax(scaled_score, axis=-1)
         output = tf.matmul(weights, value)
         return output, weights
-
+    #Splits one big embedding space into smaller ones
     def split_heads(self, x, batch_size):
         x = tf.reshape(x, (batch_size, -1, self.num_heads, self.projection_dim))
         return tf.transpose(x, perm=[0, 2, 1, 3])
