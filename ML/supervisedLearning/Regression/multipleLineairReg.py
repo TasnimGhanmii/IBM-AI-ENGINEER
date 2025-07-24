@@ -17,6 +17,7 @@ df=df.drop(['MODELYEAR', 'MAKE', 'MODEL', 'VEHICLECLASS', 'TRANSMISSION', 'FUELT
 #removing correlated features
 df = df.drop(['CYLINDERS', 'FUELCONSUMPTION_CITY', 'FUELCONSUMPTION_HWY','FUELCONSUMPTION_COMB',],axis=1)
 
+#creates a matrix of scatter plots showing pairwise relationships between all numerical columns in the DataFrame df
 axes = pd.plotting.scatter_matrix(df, alpha=0.2)
 # need to rotate axis labels so we can read them
 for ax in axes.flatten():
@@ -24,16 +25,26 @@ for ax in axes.flatten():
     ax.yaxis.label.set_rotation(0)
     ax.yaxis.label.set_ha('right')
 
+#Automatically adjusts spacing between subplots to prevent overlapping elements
 plt.tight_layout()
+#this makes the subplots touch each other , creating a compact, seamless grid
 plt.gcf().subplots_adjust(wspace=0, hspace=0)
 plt.show()
 
 #extract the input features and labels from the data set
+#separating features and h=the target
+#.iloc is integer-location based indexing in pandas
+#: means "select all rows"
+#[0,1] means "select columns at index 0 and 1"
+#here selecting all rows of 2 cols (features)
 X = df.iloc[:,[0,1]].to_numpy()
+#selecting all rows of the target
 y = df.iloc[:,[2]].to_numpy()
 
 #preprocess selected features
+#creating a scaler obj ti standarize features (mean=0, standard deviation=1)
 std_scaler = preprocessing.StandardScaler()
+#return scaled features, fit computes the std & mean for each col & store them in std_scaler then transform applies the standarization using the computed mean & std
 X_std = std_scaler.fit_transform(X)
 
 X_train, X_test, y_train, y_test = train_test_split(X_std,y,test_size=0.2,random_state=42)
@@ -45,7 +56,9 @@ regressor = linear_model.LinearRegression()
 regressor.fit(X_train, y_train)
 
 # Print the coefficients
+#array of calculated weights for each feature
 coef_ =  regressor.coef_
+#bias
 intercept_ = regressor.intercept_
 
 print ('Coefficients: ',coef_)
