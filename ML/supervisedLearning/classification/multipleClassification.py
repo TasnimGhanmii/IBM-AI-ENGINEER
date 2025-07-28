@@ -1,8 +1,10 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+#visualization lib built on top of matplotlib 
 import seaborn as sns
 from sklearn.model_selection import train_test_split
+                                  #preproc categorical & numerical data
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from sklearn.linear_model import LogisticRegression
 from sklearn.multiclass import OneVsOneClassifier
@@ -26,11 +28,14 @@ scaled_df = pd.DataFrame(scaled_features, columns=scaler.get_feature_names_out(c
 scaled_data = pd.concat([data.drop(columns=continuous_columns), scaled_df], axis=1)
 
 ##one-hot encoding##
+#Convert categorical features into numerical features using one-hot encoding and encode the target variable.
 # Identifying categorical columns
 categorical_columns = scaled_data.select_dtypes(include=['object']).columns.tolist()
 categorical_columns.remove('NObeyesdad')  # Exclude target column
 
 # Applying one-hot encoding
+#sparse_output:false: means no matrics sparse, it's gonna be a dense array (normal numpy array)
+#drop='first':dropping the first column to avoid multicollinearity
 encoder = OneHotEncoder(sparse_output=False, drop='first')
 encoded_features = encoder.fit_transform(scaled_data[categorical_columns])
 
@@ -52,6 +57,7 @@ y = prepped_data['NObeyesdad']
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
 
 # Training logistic regression model using One-vs-All (default)
+                                                  # run for a maximum of 1000 iterations to find the optimal parameters
 model_ova = LogisticRegression(multi_class='ovr', max_iter=1000)
 model_ova.fit(X_train, y_train)
 
