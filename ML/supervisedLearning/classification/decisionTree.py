@@ -39,6 +39,7 @@ X_trainset,X_testset,y_trainset,y_testset=train_test_split(X,y,test_size=0.3,ran
 drugTree = DecisionTreeClassifier(criterion="entropy", max_depth = 4)
 drugTree.fit(X_trainset,y_trainset)
 tree_predictions = drugTree.predict(X_testset)
+                         #for classification where u predict labels
 print('accuracy',metrics.accuracy_score(y_testset,tree_predictions))
 
 #visualize
