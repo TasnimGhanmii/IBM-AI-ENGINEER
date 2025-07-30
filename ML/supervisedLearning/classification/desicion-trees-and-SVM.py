@@ -5,6 +5,7 @@ import pandas as pd
 from sklearn.preprocessing import StandardScaler,normalize
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.svm import LinearSVC
+                            #good for rare events, robust to imbalance 
 from sklearn.metrics import roc_auc_score
 from sklearn.model_selection import train_test_split
 from sklearn.utils.class_weight import compute_sample_weight
