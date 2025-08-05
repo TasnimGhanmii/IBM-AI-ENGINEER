@@ -104,6 +104,8 @@ def train_model(iter):
         loss.backward()
         
         # updata parameters
+        #PyTorch automatically calculates how sensitive the loss is to changes in w.
+        #This sensitivity is called the gradient, and it gets stored in w.grad (object) & .data is accessing the numerical value of the gradient
         w.data = w.data - lr * w.grad.data
         
         # zero the gradients before running the backward pass
