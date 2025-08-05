@@ -70,6 +70,7 @@ plt.legend()
 plt.show()
 
 w = torch.tensor(-10.0, requires_grad = True)
+
 def forward(x):
     y= w*x
 
