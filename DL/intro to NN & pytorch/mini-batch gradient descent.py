@@ -21,7 +21,7 @@ def criterion(yhat,y):
 
 #BGD
 def train_model_BGD(epochs):
-    for epoch in epochs:
+    for epoch in range(epochs):
         yhat=forward(X)
         loss=criterion(yhat,Y)
         LOSS_BGD.append(loss)
@@ -52,7 +52,7 @@ class Data(Dataset):
         return self.len
     
 dataset=Data()
-trainloader=DataLoader(dataset=dataset,batch_size=3)
+trainloader=DataLoader(dataset=dataset,batch_size=1)
 
 #SGD
 LOSS_SGD = []
@@ -71,3 +71,19 @@ def train_model_SGD(epochs):
             b.grad.data.zero_()
 
 train_model_SGD(10)
+
+
+#mini-batch 
+trainloader=DataLoader(dataset=dataset,batch_size=3)
+def train_model_Mini5(epochs):
+    for epoch in range(epochs):
+        Yhat = forward(X)
+        #train loader 
+        for x, y in trainloader:
+            yhat = forward(x)
+            loss = criterion(yhat, y)
+            loss.backward()
+            w.data = w.data - lr * w.grad.data
+            b.data = b.data - lr * b.grad.data
+            w.grad.data.zero_()
+            b.grad.data.zero_()
