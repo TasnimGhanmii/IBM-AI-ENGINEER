@@ -1,7 +1,4 @@
 import torch 
-import numpy as np
-import matplotlib.pyplot as plt
-from mpl_toolkits import mplot3d
 from torch.utils.data import Dataset, DataLoader
 
 torch.manual_seed(1)
