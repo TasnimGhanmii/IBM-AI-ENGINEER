@@ -1,6 +1,7 @@
 from torch.utils.data import Dataset, DataLoader
 from torch import nn
 import torch
+import torch.optim as optim
 
 class Data(Dataset):
     
