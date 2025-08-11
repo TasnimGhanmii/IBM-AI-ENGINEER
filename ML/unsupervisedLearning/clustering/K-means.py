@@ -9,10 +9,14 @@ import plotly.express as px
 np.random.seed(0)
 
 #using make_blobs to create random clusters of points
+                                                                              #how spread out the points are
 X, y = make_blobs(n_samples=5000, centers=[[4,4], [-2, -1], [2, -3], [1, 1]], cluster_std=0.9)
 plt.scatter(X[:, 0], X[:, 1], marker='.',alpha=0.3,ec='k',s=80)
 
 #setting up K-means
+#k-means++ is a smart initialization method that helps in speeding up convergence and often leads to better clustering results compared to random initialization.
+#This parameter specifies the number of times the K-means algorithm will be run with different centroid seeds.
+# running the K-means algorithm 12 times with different initial centroids and choosing the best result
 k_means = KMeans(init = "k-means++", n_clusters = 4, n_init = 12)
 k_means.fit(X)
 
