@@ -26,6 +26,8 @@ class Data(Dataset):
 dataset=Data()
 
 #softmax classifier
+#a fully connected layer that takes an input of size 1 and outputs a tensor of size 3
+#The Linear layer outputs raw scores for each class
 model = nn.Sequential(nn.Linear(1, 3))
 criterion = nn.CrossEntropyLoss()
 optimizer = torch.optim.SGD(model.parameters(), lr = 0.01)
@@ -43,15 +45,17 @@ def train_model(epochs):
             optimizer.step()
 
 train_model(300)
-
+#The raw output of the model for the entire dataset
 z =  model(dataset.x)
+#The result is a tuple where the first element is the maximum value and the second element is the index of the maximum value in each row
 _, yhat = z.max(1)
 print("The prediction:", yhat)
-
+#nb of correct predictions
 correct = (dataset.y == yhat).sum().item()
 accuracy = correct / len(dataset)
 print("The accuracy: ", accuracy)
-
+#computing probabilities
+#The class with the highest probability is chosen as the predicted class.
 Softmax_fn=nn.Softmax(dim=-1)
 Probability =Softmax_fn(z)
 for i in range(3):
