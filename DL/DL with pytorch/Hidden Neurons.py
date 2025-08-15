@@ -53,4 +53,4 @@ learning_rate=0.1
 criterion=nn.BCELoss()
 optimizer=torch.optim.Adam(model.parameters(), lr=learning_rate)
 train_loader=DataLoader(dataset=dataset,batch_size=100)
-COST=train(dataset,model,criterion, train_loader, optimizer, epochs=600,plot_number=200)
+COST=train(dataset,model,criterion, train_loader, optimizer, epochs=600)
