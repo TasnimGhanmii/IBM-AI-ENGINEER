@@ -115,9 +115,7 @@ LOSS12 = train(data_set, model, criterion, train_loader, optimizer, epochs=500)
 model=Net(2,3,1)
 LOSS12 = train(data_set, model, criterion, train_loader, optimizer, epochs=500)
 
-model=Net(2,4,1)
-LOSS12 = train(data_set, model, criterion, train_loader, optimizer, epochs=500)
-
+#3 neurons is the optimal number
 
 
 
