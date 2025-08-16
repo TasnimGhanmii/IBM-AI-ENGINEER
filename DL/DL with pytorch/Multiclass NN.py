@@ -47,7 +47,7 @@ def train(model, criterion, train_loader, validation_loader, optimizer, epochs=1
     return useful_stuff
 
 train_dataset = dsets.MNIST(root='./data', train=True, download=True, transform=transforms.ToTensor())
-validation_dataset = dsets.MNIST(root='./data', train=True, download=True, transform=transforms.ToTensor())
+validation_dataset = dsets.MNIST(root='./data', train=False, download=True, transform=transforms.ToTensor())
 criterion = nn.CrossEntropyLoss()
 train_loader = torch.utils.data.DataLoader(dataset=train_dataset, batch_size=2000, shuffle=True)
 validation_loader = torch.utils.data.DataLoader(dataset=validation_dataset, batch_size=5000, shuffle=False)
