@@ -11,7 +11,7 @@ torch.manual_seed(2)
 #model
 class NNSigmoid(nn.Module):
     def __init__(self,D_in,H1,H2,D_out):
-        super(NN,self).__init__()
+        super(NNSigmoid,self).__init__()
         self.linear1=nn.Linear(D_in,H1)
         self.linear2=nn.Linear(H1,H2)
         self.linear3=nn.Linear(H2,D_out)
