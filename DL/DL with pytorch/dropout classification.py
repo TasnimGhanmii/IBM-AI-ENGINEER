@@ -3,8 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import numpy as np
 import matplotlib as plt
-from torch.utils.data import Dataset, DataLoader
-
+from torch.utils.data import Dataset
 def accuracy(model, data_set):
     _, yhat = torch.max(model(data_set.x), 1)
     return (yhat == data_set.y).numpy().mean()
@@ -60,13 +59,6 @@ class Data(Dataset):
         plt.xlim(0,1)
         plt.ylim(0,1)
         plt.legend()
-    
-    # Make a multidimension ploynomial function
-    def multi_dim_poly(self, x):
-        x = np.matrix(x)
-        out = np.array(self.a[0] + (x) * self.a[1:3] + np.multiply(x[:, 0], x[:, 1]) * self.a[4] + np.multiply(x, x) * self.a[5:7])
-        out = np.array(out)
-        return out
     
 
 data_set = Data(noise_std=0.2)
