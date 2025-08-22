@@ -10,7 +10,11 @@ image[0,0,:,2]=1
 Z=conv(image)
 relu = nn.ReLU()
 relu(Z)
-
+#Pytorch randomly assigns values to each kernel. However, use kernels that have been developed to detect edges
+Gx=torch.tensor([[1.0,0,-1.0],[2.0,0,-2.0],[1.0,0,-1.0]])
+conv.state_dict()['weight'][0][0]=Gx
+conv.state_dict()['bias'][0]=0.0
+conv.state_dict()
 image1=torch.zeros(1,1,4,4)
 image1[0,0,0,:]=torch.tensor([1.0,2.0,3.0,-4.0])
 image1[0,0,1,:]=torch.tensor([0.0,2.0,-3.0,0.0])
