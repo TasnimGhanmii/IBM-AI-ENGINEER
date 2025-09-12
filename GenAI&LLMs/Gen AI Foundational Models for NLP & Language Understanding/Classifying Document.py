@@ -27,6 +27,7 @@ def plot(COST, ACC):
     plt.show()
 
 # Load datasets 
+                     #selecting the file to iterate over its content 
 train_iter = AG_NEWS(split="train")
 test_iter = AG_NEWS(split="test")
 
@@ -39,6 +40,7 @@ tokenizer = get_tokenizer("basic_english")
 
 def yield_tokens(data_iter):
     for _, text in data_iter:
+        #pauses the function, returns the tokenised list, and remembers where it stopped so the next time you call next() on the iterator it continues right after that line.
         yield tokenizer(text.lower())
 
 # Build vocabulary

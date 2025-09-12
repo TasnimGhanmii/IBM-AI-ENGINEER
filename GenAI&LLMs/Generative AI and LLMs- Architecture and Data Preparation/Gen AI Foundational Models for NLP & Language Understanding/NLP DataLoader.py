@@ -28,10 +28,19 @@ class CustomDataset(Dataset):
 
     def __len__(self):
         return len(self.sentences)
-
+    
     def __getitem__(self, idx):
+
+        #Run the  tokenizer on that string.
+        #Returns a Python list of strings
+                                #Grabs the raw string that sits at position idx in the list you gave the Dataset.
         tokens = self.tokenizer(self.sentences[idx])
+
         # Convert tokens to tensor indices using vocab
+        #looks each token up in the Vocab object that was built earlier.
+        #If the token never appeared during vocabulary construction it maps to <unk> (index 0).
+        #self.vocab also truns the words into numerical form by giving them numerical coordinates, it returns the index of the word from the list it formed
+        #we can access the words &/or repreent em by their coordinates 
         tensor_indices = [self.vocab[token] for token in tokens]
         return torch.tensor(tensor_indices)
 
@@ -39,6 +48,7 @@ class CustomDataset(Dataset):
 tokenizer = get_tokenizer("basic_english")
 
 # Build vocabulary
+#is gonna parse the sentences and transforms them into tokens
 vocab = build_vocab_from_iterator(map(tokenizer, sentences))
 
 # Create an instance of your custom data set
@@ -57,6 +67,7 @@ custom_dataset = CustomDataset(sentences, tokenizer, vocab)
 batch_size = 2
 
 # Create a data loader
+#multi-threaded iterator that yields mini-batches.
 dataloader = DataLoader(custom_dataset, batch_size=batch_size, shuffle=True)
 
 # Iterate through the data loader
