@@ -2,7 +2,7 @@ from tqdm import tqdm
 import matplotlib.pyplot as plt
 import torch
 import torch.nn as nn
-import torch.nn.functional as F  # Added missing import
+import torch.nn.functional as F  
 from torch.utils.data import DataLoader
 from torchtext.data.utils import get_tokenizer
 from torchtext.datasets import AG_NEWS
