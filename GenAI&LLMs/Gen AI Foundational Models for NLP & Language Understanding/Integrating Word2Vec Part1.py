@@ -153,6 +153,7 @@ word_vectors = w2v_model.wv
 word_to_index = {word: index for index, word in enumerate(word_vectors.index_to_key)}
 
 # Create an instance of nn.Embedding and load it with the trained vectors
+#creates an embedding layer 
 embedding_dim = w2v_model.vector_size
 embedding = torch.nn.Embedding(len(word_vectors.index_to_key), embedding_dim)
 embedding.weight.data.copy_(torch.from_numpy(word_vectors.vectors))
