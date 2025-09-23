@@ -1,8 +1,6 @@
-import os
 import matplotlib.pyplot as plt
 
 from gensim.models import Word2Vec
-from collections import defaultdict
 import torch
 import torch.nn as nn
 
@@ -14,21 +12,16 @@ from torchtext.data.functional import to_map_style_dataset
 from torchtext.data.utils import get_tokenizer
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-from utils import find_similar_words
-
-if os.path.exists("utils.py"):
-    os.remove("utils.py")
-    print("utils.py deleted.")
-else:
-    print("utils.py not found.")
-
 
 import numpy as np
 
-from gensim.models import Word2Vec
-
-
+#the dimension of our space is equal the dimension of the embedded vectors
+#computes the similarity by calculating the angle (cos)  between the vectors representation of words
+#cos θ = 1 → vectors point in the same direction (maximum similarity).
+#cos θ = 0 → vectors are orthogonal (no similarity).
+#cos θ = –1 → vectors point in opposite directions (anti-similar)
 def find_similar_words(target_word, embedding_dict, top_k=2):
+    #checks if the word is in the vocabulary
     if target_word not in embedding_dict:
         return f"Word '{target_word}' not found in embeddings."
     
@@ -37,11 +30,17 @@ def find_similar_words(target_word, embedding_dict, top_k=2):
 
     for word, vector in embedding_dict.items():
         if word == target_word:
-            continue
+            continue #means skip
+        #measures the cos between the target vector & word vector
         similarity = np.dot(target_vector, vector) / (np.linalg.norm(target_vector) * np.linalg.norm(vector))
         similarities[word] = similarity
-
+    #gighest score first 
+                          # iterable of (word, cosine-score) tuples
+                                                #sort by the second element of each tuple” (the score)
     sorted_words = sorted(similarities.items(), key=lambda x: x[1], reverse=True)
+                                                                    #descending order
+    #returns a python list of only the words & ignores the score
+                                            #slice the first k tuples from that sorted list
     return [word for word, _ in sorted_words[:top_k]]
 
 def warn(*args, **kwargs):
@@ -54,6 +53,7 @@ warnings.filterwarnings('ignore')
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 ####Applying pretrained word embeddings####
+
 # creating an instance of the 6B version of Glove() model
 glove_vectors_6B = GloVe(name ='6B') # you can specify the model with the following format: GloVe(name='840B', dim=300)
 # creating another instance of a bigger Glove() model
@@ -62,10 +62,8 @@ glove_vectors_6B = GloVe(name ='6B') # you can specify the model with the follow
 # load the glove model pretrained weights into a PyTorch embedding layer
 embeddings_Glove6B = torch.nn.Embedding.from_pretrained(glove_vectors_6B.vectors,freeze=True)
 
-word_to_index = glove_vectors_6B.stoi  # Vocabulary index mapping
-word_to_index['team']
+word_to_index = glove_vectors_6B.stoi  # Vocabulary index mapping by returning the indexes of words in the models vocab
 
-embeddings_Glove6B.weight[word_to_index['team']]
 
 # an array of example words
 words = [
@@ -113,6 +111,7 @@ print("{} most similar words to {}:".format(top_k,target_word) ,similar_words)
 
 
 ####Train a word2vec model from gensim####
+
 sentences = [["I", "like", "to", "eat", "pizza"],
              ["Pizza", "is", "my", "favorite", "food"],
              ["I", "enjoy", "eating", "pasta"]]
@@ -120,15 +119,23 @@ sentences = [[word.lower() for word in sentence] for sentence in sentences]
 
 
 # Create an instance of Word2Vec model
+#here the model is trained from scratch
+#since we gave the constructor sentences no need for .build & .train bc it's done auto if sentences are provided
 w2v_model = Word2Vec(sentences, vector_size=100, window=3, min_count=1, workers=4)
 
 # Build vocab using the training data
-w2v_model.build_vocab(sentences, progress_per=10000)
+#gets ignored bc the vocab is already built
+#w2v_model.build_vocab(sentences, progress_per=10000)
 
 # Train the model on your training data
-w2v_model.train(sentences, total_examples=w2v_model.corpus_count, epochs=30, report_delay=1)
+#redundent execution
+#w2v_model.train(sentences, total_examples=w2v_model.corpus_count, epochs=30, report_delay=1)
 
 # Finding similar words
+#.wv is the “word-vectors” attribute of a Gensim Word2Vec model.
+#It is a KeyedVectors object that holds only the final embedding matrix and the lookup methods, 
+# without the full neural-network internals.
+#so here fetches the vector for pizza
 similar_words = w2v_model.wv.most_similar("pizza")
 print("Similar words to 'pizza':", similar_words)
 
@@ -137,8 +144,12 @@ similarity = w2v_model.wv.similarity("pizza", "pasta")
 print("Similarity between 'pizza' and 'pasta':", similarity)
 
 # Extract word vectors and create word-to-index mapping
+#in short this is the embedding matrix 
 word_vectors = w2v_model.wv
+
 # a dictionary to map words to their index in vocab
+#return the index of the word's embedded vector, specifically returns  a dict of word: word's embedded vector index
+                                                          #gives the word whose vector sits in row i of word_vectors.vectors.
 word_to_index = {word: index for index, word in enumerate(word_vectors.index_to_key)}
 
 # Create an instance of nn.Embedding and load it with the trained vectors
