@@ -218,6 +218,7 @@ print("Query token :", q)
 # Select the corresponding key vector in K (input dictionary matrix) using matrix multiplication
 # This operation gives us the index where 'sous' would be '1' in the one-hot encoded input matrix
 print("Select key (K) :", q @ K.T)
+#@ matrix multiplication , K.T: transpose of T
 
 # Use the index found from the key selection to find the corresponding value vector in V (output dictionary matrix)
 # This operation selects the row from V that is the translation of 'sous' in the output vocabulary
