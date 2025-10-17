@@ -107,6 +107,6 @@ rag_application = gr.Interface(
 )
 
 # Launch the app
-rag_application.launch(server_name="127.0.0.1", server_port= 7859)
+rag_application.launch(server_name="127.0.0.1", server_port= 7859,share=True)
 
 
