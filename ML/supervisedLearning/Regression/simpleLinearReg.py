@@ -1,3 +1,6 @@
+#note: sklearn contains rich set of tools for supervised & unsupervised algos, model evaluation, hyperparameter tuning, and data splitting
+
+
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -8,6 +11,7 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 #loading data
 url= "https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-ML0101EN-SkillsNetwork/labs/Module%202/data/FuelConsumptionCo2.csv"
 #loading data from the CSV into a pandas dataframe, 2 dim array (col,row)
+#pandas auto handles the REST requests
 df=pd.read_csv(url)
 #extract features (selcting cols)
 cdf = df[['ENGINESIZE','CYLINDERS','FUELCONSUMPTION_COMB','CO2EMISSIONS']]
@@ -33,6 +37,7 @@ plt.scatter(X_train, y_train,  color='blue')
 plt.plot(X_train, regressor.coef_ * X_train + regressor.intercept_, '-r')
 plt.xlabel("Engine size")
 plt.ylabel("Emission")
+plt.show()
 
 # Use the predict method to make test predictions
 y_test_ = regressor.predict(X_test.reshape(-1,1))
