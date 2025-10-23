@@ -10,7 +10,7 @@ url= "https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeve
 df=pd.read_csv(url)
 #df.describe()
 
-#dropping the num numerical variables for simplicity
+#dropping the non numerical variables for simplicity
 df=df.drop(['MODELYEAR', 'MAKE', 'MODEL', 'VEHICLECLASS', 'TRANSMISSION', 'FUELTYPE',],axis=1)
 
 #df.corr()
@@ -42,7 +42,7 @@ X = df.iloc[:,[0,1]].to_numpy()
 y = df.iloc[:,[2]].to_numpy()
 
 #preprocess selected features
-#creating a scaler obj ti standarize features (mean=0, standard deviation=1)
+#creating a scaler obj to standarize features (mean=0, standard deviation=1)
 std_scaler = preprocessing.StandardScaler()
 #return scaled features, fit computes the std & mean for each col & store them in std_scaler then transform applies the standarization using the computed mean & std
 X_std = std_scaler.fit_transform(X)

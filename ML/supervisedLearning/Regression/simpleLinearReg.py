@@ -16,6 +16,7 @@ df=pd.read_csv(url)
 #extract features (selcting cols)
 cdf = df[['ENGINESIZE','CYLINDERS','FUELCONSUMPTION_COMB','CO2EMISSIONS']]
 
+#because train_test_split expects numpy array
 X = cdf.ENGINESIZE.to_numpy()
 y = cdf.CO2EMISSIONS.to_numpy()                                                                      #very time the code runs, the same rows go into train/test sets.
 X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.2,random_state=42)
@@ -26,6 +27,7 @@ regressor = linear_model.LinearRegression()
 # train the model on the training data
 # X_train is a 1-D array but sklearn models expect a 2D array as input for the training data, with shape (n_observations, n_features).
 # So we need to reshape it. We can let it infer the number of observations using '-1'.
+#this fct implicitly does OSL to calculate the coef
 regressor.fit(X_train.reshape(-1, 1), y_train)
 
 # Print the coefficients
